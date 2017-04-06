@@ -161,14 +161,11 @@ function criarNovaCelula(){
 // ------MOvimentos-----------------------------------------------------------//
 function move2Left(){
     mov_flag = MOV_LEFT;
-    
-    
-    
+       
     //ARMAZENANDO O ESTADO DA DIV CABEÇA
     var estadox = $('#0').position().left;
     var estadoy = $('#0').position().top;
  /***********************************************************************************************************************/  
- 
  
     
     //MOVENDO A DIV PRINCIPAL (CABEÇA);
@@ -177,13 +174,8 @@ function move2Left(){
     div.setAttribute("style","width:50px;height:50px;background:black;top:"+topo+"px;left:"+left+"px;position:absolute");   
  /***********************************************************************************************************************/  
  
- 
     //CHECANDO TODAS COLISÕES
-    checkCollisions(div, $('#direita'));
     checkCollisions(div, $('#esquerda'));
-    checkCollisions(div, $('#cima'));
-    checkCollisions(div, $('#baixo'));
-    /* O cookie recuperado sempre no indice 0 pois ele é o unico na página. */
     checkCollisionsOnCookie(div, $('.cookie')[0]);
     collisionYourSelf();
  /***********************************************************************************************************************/ 
@@ -204,9 +196,6 @@ function move2Right(){
     var div = document.getElementById("0");
     div.setAttribute("style","width:50px;height:50px;background:black;top:"+topo+"px;left:"+left+"px;position:absolute");
     checkCollisions(div, $('#direita'));
-    checkCollisions(div, $('#esquerda'));
-    checkCollisions(div, $('#cima'));
-    checkCollisions(div, $('#baixo'));
     // O cookie recuperado sempre no indice 0 pois ele é o unico na página.
     checkCollisionsOnCookie(div, $('.cookie')[0]);
     collisionYourSelf();
@@ -227,10 +216,7 @@ function move2Up(){
     var div = document.getElementById("0");
     div.setAttribute("style","width:50px;height:50px;background:black;top:"+topo+"px;left:"+left+"px;position:absolute");
     checkCollisionsOnCookie(div, $('.cookie')[0]);
-    checkCollisions(div, $('#direita'));
-    checkCollisions(div, $('#esquerda'));
     checkCollisions(div, $('#cima'));
-    checkCollisions(div, $('#baixo'));
     // O cookie recuperado sempre no indice 0 pois ele é o unico na página.
     
     collisionYourSelf();
@@ -251,10 +237,6 @@ function move2Down(){
     var div = document.getElementById("0");
     div.setAttribute("style","width:50px;height:50px;background:black;top:"+topo+"px;left:"+left+"px;position:absolute");
     
-    checkCollisions(div, $('#direita'));
-    checkCollisions(div, $('#direita'));
-    checkCollisions(div, $('#esquerda'));
-    checkCollisions(div, $('#cima'));
     checkCollisions(div, $('#baixo'));
     // O cookie recuperado sempre no indice 0 pois ele é o unico na página.
     checkCollisionsOnCookie(div, $('.cookie')[0]);
@@ -268,23 +250,22 @@ function move2Down(){
 //----------------------------------------------------------------------//
 function getPositions(obj){
   var $objselected = $(obj);
-  //var obj = document.getElementById();
   var pos = $objselected.position();
   var width = $objselected.width();
   var height = $objselected.height();
   return [
-    [pos.left, pos.left + width],
-    [pos.top, pos.top + height]
+    [pos.left, pos.left + width], // posicao esquerda, posiçao esquerda + largura
+    [pos.top, pos.top + height]   // posicao cima, posicao cima+altura;
   ];
 }
 //Algoritimo de comparação dos objetos
 function comparePositions(p1, p2) {
-    //compara p1 e p2 se verdadeiro retorna p1 se nao retorna p2 e vise versa
-  var x1 = p1[0] < p2[0] ? p1 : p2;
-  var x2 = p1[0] < p2[0] ? p2 : p1;
-  return x1[1] > x2[0] || x1[0] === x2[0] ? true : false;
   
- // condição ? retorno p/verdadeiro : retorno p/ false
+  var x1 = p1[0] < p2[0] ? p1 : p2; //  SE obj1.posLeft <  obj2.posLeft ENTAO x1 = objeto 1
+  var x2 = p1[0] < p2[0] ? p2 : p1; //  SE obj1.posleft <  obj2.posLeft ENTAO X2 = objeto 2
+  return x1[1] > x2[0] || x1[0] === x2[0] ? true : false; // SE (obj1.posLeft + altura) > obj2.posLeft  OU obj1.posLeft === obj2.posLeft ENTAO true SENAO false.
+  
+ 
 }
 
 function checkCollisions(obj1, obj2) {
@@ -298,41 +279,32 @@ function checkCollisions(obj1, obj2) {
   if (match) {
    
    var lugarColisao = obj2.attr('id');
-   
-   var posicaoCobraLeft =  $(obj1).position().left;
-   var posicaoCobraTop = $(obj1).position().top;
-    // Troca a posição da Cobra ao Colidir com as bordas.
+        //window.location.href = 'index.html';
     
+   // Troca a posição da Cobra ao Colidir com as bordas.
    switch(lugarColisao){
        case 'cima':
            topo = $('#baixo').position().top;
-           topo = topo - 50;
-    
            var div = document.getElementById("0");
-           div.setAttribute("style","width:50px;height:50px;background:black;top:"+topo+"px;left:"+left+"px;position:absolute");
+           div.setAttribute("style","width:50px;height:50px;background:black;top:"+(topo - 50)+"px;left:"+left+"px;position:absolute");
        break;
        case 'baixo':
-           //alert("Colidiu com a parte de baixo");
+          // alert("Colidiu com a parte de baixo");
            topo = $('#cima').position().top;
-           topo = topo + 50;
-           
            var div = document.getElementById("0");
-           div.setAttribute("style","width:50px;height:50px;background:black;top:"+topo+"px;left:"+left+"px;position:absolute");
+          div.setAttribute("style","width:50px;height:50px;background:black;top:"+(topo+50)+"px;left:"+left+"px;position:absolute");
        break;
        case 'esquerda':
+          // alert("Colidiu com a Esquerda");
           left = $('#direita').position().left;
-          left = left -50;
-          
           var div = document.getElementById("0");
-          div.setAttribute("style","width:50px;height:50px;background:black;top:"+topo+"px;left:"+left+"px;position:absolute");
+          div.setAttribute("style","width:50px;height:50px;background:black;top:"+topo+"px;left:"+(left - 50)+"px;position:absolute");
        break;
-       case 'direita':
+       case 'direita':       
            //alert("Colidiu com a Direita");
-          left = $('#esquerda').position().left;
-          left = left + 50;
-          
+          left = $('#esquerda').position().left;         
           var div = document.getElementById("0");
-          div.setAttribute("style","width:50px;height:50px;background:black;top:"+topo+"px;left:"+left+"px;position:absolute");
+          div.setAttribute("style","width:50px;height:50px;background:black;top:"+topo+"px;left:"+(left + 50)+"px;position:absolute");
        break;
    }
     

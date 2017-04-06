@@ -13,8 +13,7 @@ and open the template in the editor.
    width: 50px;
    background: yellow;
    position: absolute;
-   top: 0px;
-   left: 0px;
+   left: 0%;
    
    
 }
@@ -23,20 +22,20 @@ and open the template in the editor.
    width: 50px;
    background: yellow;
    position: absolute;
-   top: 0px;
-   right: 0px;
+   right: 0%;
 }
 #cima{
    height: 50px;
    width: 100%;
    background: yellow;
    position: absolute;
-   top: 0px;
+   top: 0%;
 }
 #baixo{
    height: 50px;
    width: 100%;
    background: yellow;
    position: absolute;
-   bottom: 0px; 
+   bottom: -1%; 
+  
 }

@@ -89,14 +89,39 @@ document.addEventListener("keydown", function(e){
 function createSnake(){
     var cabeca = document.createElement("div");
     var divId = document.createAttribute("id");
+    var divClass = document.createAttribute("class");
+    divClass.value = "snake";
     divId.value = id_auto;
     cabeca.setAttributeNode(divId);
-
-    cabeca.setAttribute("style","width:50px;height:50px;background:black;top:50px;left:50px;position:absolute");
+    cabeca.setAttributeNode(divClass);
+    cabeca.setAttribute("style","width:50px;height:50px;background:black;top:500px;left:150px;position:absolute");
+    
+    var t1 = document.createElement("div");
+    var divId1 = document.createAttribute("id");
+    var divClass1 = document.createAttribute("class");
+    divClass1.value = "snake";
+    id_auto = id_auto + 1;
+    divId1.value = id_auto;
+    adicionarAoArray(id_auto);
+    t1.setAttributeNode(divId1);
+    t1.setAttributeNode(divClass1);
+    t1.setAttribute("style","width:50px;height:50px;background:black;top:500px;left:100px;position:absolute");
+    
+    var t2 = document.createElement("div");
+    var divId2 = document.createAttribute("id");
+    var divClass2 = document.createAttribute("class");
+    divClass2.value = "snake";
+    id_auto = id_auto + 1;
+    divId2.value = id_auto;
+    adicionarAoArray(id_auto);
+    t2.setAttributeNode(divId2);
+    t2.setAttributeNode(divClass2);
+    t2.setAttribute("style","width:50px;height:50px;background:black;top:500px;left:50px;position:absolute");
     
     var snake = document.getElementById('paiDaSnake');
     snake.appendChild(cabeca);
-    
+    snake.appendChild(t1);
+    snake.appendChild(t2);
 }
 
 function inicializa(){ 
@@ -114,6 +139,8 @@ function adicionarAoArray(id){
     
     celulas[tam] = id;
 }
+
+
 
 /*MÉTODO RECEBE A POS X, Y E O ID DA CELULA QUE DESEJA SER MOVIDA*/
 function moverCelula(x,y,id){
@@ -171,7 +198,8 @@ function move2Left(){
     //MOVENDO A DIV PRINCIPAL (CABEÇA);
     left=left-increment; 
     var div = document.getElementById("0");
-    div.setAttribute("style","width:50px;height:50px;background:black;top:"+topo+"px;left:"+left+"px;position:absolute");   
+    div.setAttribute("style","width:50px;height:50px;background:black;top:"+topo+"px;left:"+left+"px;position:absolute");
+    
  /***********************************************************************************************************************/  
  
     //CHECANDO TODAS COLISÕES
@@ -222,7 +250,7 @@ function move2Up(){
     collisionYourSelf();
     moveContinuos = setTimeout('move2Up();', velocity);
     moverCelula(estadox, estadoy, 1);
-      
+    
 }
 
 function move2Down(){

@@ -8,10 +8,12 @@ and open the template in the editor.
     Author     : ander
 */
 
+
+
 #esquerda{
    height: 100%;
    width: 50px;
-   background: yellow;
+   background: #5b5b5b;
    position: absolute;
    left: 0%;
    
@@ -20,22 +22,32 @@ and open the template in the editor.
 #direita{
    height: 100%;
    width: 50px;
-   background: yellow;
+   background: #5b5b5b;
    position: absolute;
    right: 0%;
 }
 #cima{
    height: 50px;
    width: 100%;
-   background: yellow;
+   background: #5b5b5b;
    position: absolute;
    top: 0%;
 }
 #baixo{
    height: 50px;
    width: 100%;
-   background: yellow;
+   background: #5b5b5b;
    position: absolute;
-   bottom: -1%; 
+   bottom: -2%; 
   
 }
+
+#baixo1{
+   height: 25px;
+   width: 100%;
+   background: #5b5b5b;
+   position: absolute;
+   bottom: 0px; 
+  
+}
+

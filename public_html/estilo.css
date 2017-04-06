@@ -1,0 +1,42 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : 02/04/2017, 14:40:05
+    Author     : ander
+*/
+
+#esquerda{
+   height: 100%;
+   width: 50px;
+   background: yellow;
+   position: absolute;
+   top: 0px;
+   left: 0px;
+   
+   
+}
+#direita{
+   height: 100%;
+   width: 50px;
+   background: yellow;
+   position: absolute;
+   top: 0px;
+   right: 0px;
+}
+#cima{
+   height: 50px;
+   width: 100%;
+   background: yellow;
+   position: absolute;
+   top: 0px;
+}
+#baixo{
+   height: 50px;
+   width: 100%;
+   background: yellow;
+   position: absolute;
+   bottom: 0px; 
+}

@@ -7,7 +7,21 @@ and open the template in the editor.
     Created on : 02/04/2017, 14:40:05
     Author     : ander
 */
+body{
+	overflow: hidden;
+}
 
+#pontuacao {
+
+    position: absolute;
+    top: -1%;
+    right: 10%;
+    font-family: Calibri;
+    font-size: 50px;
+    z-index: 2;
+    color : white;
+
+}
 
 
 #esquerda{

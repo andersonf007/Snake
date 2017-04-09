@@ -11,13 +11,12 @@ var velocity = 190; //Quanto maior mais lento.
 var topo = 500;
 var left = 500;
 var increment=50;
-var head_currentX = 0;
-var head_currentY = 0;
 var id_auto = 0;
 
 var celulas = new Array();
 var prev_x = 0;
 var prev_y = 0;
+var pontuacao = 0;
 //.......................................................................
                
 
@@ -94,7 +93,7 @@ function createSnake(){
     divId.value = id_auto;
     cabeca.setAttributeNode(divId);
     cabeca.setAttributeNode(divClass);
-    cabeca.setAttribute("style","width:50px;height:50px;background:black;top:500px;left:150px;position:absolute");
+    cabeca.setAttribute("style"," border:2px solid white; width:50px;height:50px;background:black;top:500px;left:150px;position:absolute");
     
     var t1 = document.createElement("div");
     var divId1 = document.createAttribute("id");
@@ -105,7 +104,7 @@ function createSnake(){
     adicionarAoArray(id_auto);
     t1.setAttributeNode(divId1);
     t1.setAttributeNode(divClass1);
-    t1.setAttribute("style","width:50px;height:50px;background:black;top:500px;left:100px;position:absolute");
+    t1.setAttribute("style","border:2px solid white; width:50px;height:50px;background:black;top:500px;left:100px;position:absolute");
     
     var t2 = document.createElement("div");
     var divId2 = document.createAttribute("id");
@@ -116,18 +115,20 @@ function createSnake(){
     adicionarAoArray(id_auto);
     t2.setAttributeNode(divId2);
     t2.setAttributeNode(divClass2);
-    t2.setAttribute("style","width:50px;height:50px;background:black;top:500px;left:50px;position:absolute");
+    t2.setAttribute("style", "border:2px solid white; width:50px;height:50px;background:black;top:500px;left:50px;position:absolute");
     
     var snake = document.getElementById('paiDaSnake');
     snake.appendChild(cabeca);
     snake.appendChild(t1);
     snake.appendChild(t2);
+    $('#pontuacao').html('Pontos: 0');
 }
 
 function inicializa(){ 
     createCookieRandon();
     createSnake();
-    move2Right(); // Movimento padrão para inicar o jogo.                        
+    move2Right(); // Movimento padrão para inicar o jogo. 
+
 }
 
 
@@ -151,7 +152,7 @@ function moverCelula(x,y,id){
     var estadoy = $('#'+id).position().top;
     //console.log(pescoco);
     if(pescoco != null){
-    pescoco.setAttribute("style","width:50px; height:50px; background:black; top:"+y+"px; left: "+x+"px; position:absolute;");
+    pescoco.setAttribute("style","border:2px solid white; width:50px;height:50px;background:black; top:"+y+"px; left: "+x+"px; position:absolute;");
     }
      moverCelula(estadox, estadoy, id+1);
 } 
@@ -198,7 +199,7 @@ function move2Left(){
     //MOVENDO A DIV PRINCIPAL (CABEÇA);
     left=left-increment; 
     var div = document.getElementById("0");
-    div.setAttribute("style","width:50px;height:50px;background:black;top:"+topo+"px;left:"+left+"px;position:absolute");
+    div.setAttribute("style","border:2px solid white; width:50px;height:50px;background:black;top:"+topo+"px;left:"+left+"px;position:absolute");
     
  /***********************************************************************************************************************/  
  
@@ -222,7 +223,7 @@ function move2Right(){
 
     left=left+increment;   
     var div = document.getElementById("0");
-    div.setAttribute("style","width:50px;height:50px;background:black;top:"+topo+"px;left:"+left+"px;position:absolute");
+    div.setAttribute("style","border:2px solid white; width:50px;height:50px;background:black;top:"+topo+"px;left:"+left+"px;position:absolute");
     checkCollisions(div, $('#direita'));
     // O cookie recuperado sempre no indice 0 pois ele é o unico na página.
     checkCollisionsOnCookie(div, $('.cookie')[0]);
@@ -242,7 +243,7 @@ function move2Up(){
 
     topo = topo-increment;
     var div = document.getElementById("0");
-    div.setAttribute("style","width:50px;height:50px;background:black;top:"+topo+"px;left:"+left+"px;position:absolute");
+    div.setAttribute("style","border:2px solid white; width:50px;height:50px;background:black;top:"+topo+"px;left:"+left+"px;position:absolute");
     checkCollisionsOnCookie(div, $('.cookie')[0]);
     checkCollisions(div, $('#cima'));
     // O cookie recuperado sempre no indice 0 pois ele é o unico na página.
@@ -263,7 +264,7 @@ function move2Down(){
     
     topo = topo+increment;
     var div = document.getElementById("0");
-    div.setAttribute("style","width:50px;height:50px;background:black;top:"+topo+"px;left:"+left+"px;position:absolute");
+    div.setAttribute("style"," border:2px solid white; width:50px;height:50px;background:black;top:"+topo+"px;left:"+left+"px;position:absolute");
     
     checkCollisions(div, $('#baixo'));
     // O cookie recuperado sempre no indice 0 pois ele é o unico na página.
@@ -311,28 +312,20 @@ function checkCollisions(obj1, obj2) {
     
    // Troca a posição da Cobra ao Colidir com as bordas.
    switch(lugarColisao){
-       case 'cima':
-           topo = $('#baixo').position().top;
-           var div = document.getElementById("0");
-           div.setAttribute("style","width:50px;height:50px;background:black;top:"+(topo - 50)+"px;left:"+left+"px;position:absolute");
+       case 'cima':          
+           topo = $('#baixo').position().top;          
        break;
        case 'baixo':
           // alert("Colidiu com a parte de baixo");
-           topo = $('#cima').position().top;
-           var div = document.getElementById("0");
-          div.setAttribute("style","width:50px;height:50px;background:black;top:"+(topo+50)+"px;left:"+left+"px;position:absolute");
+           topo = $('#cima').position().top;         
        break;
        case 'esquerda':
           // alert("Colidiu com a Esquerda");
-          left = $('#direita').position().left;
-          var div = document.getElementById("0");
-          div.setAttribute("style","width:50px;height:50px;background:black;top:"+topo+"px;left:"+(left - 50)+"px;position:absolute");
+          left = $('#direita').position().left;         
        break;
        case 'direita':       
            //alert("Colidiu com a Direita");
-          left = $('#esquerda').position().left;         
-          var div = document.getElementById("0");
-          div.setAttribute("style","width:50px;height:50px;background:black;top:"+topo+"px;left:"+(left + 50)+"px;position:absolute");
+          left = $('#esquerda').position().left;                  
        break;
    }
     
@@ -355,8 +348,8 @@ function checkCollisionsOnCookie(cobra, cookie){
          //criação de celula
          criarNovaCelula();
          velocity = velocity - 5;
-         console.log("Numero de celulas criadas "+celulas.length);
-         
+         pontuacao +=1;
+         $('#pontuacao').html("Pontos: "+pontuacao); 
   }
   
   
@@ -373,16 +366,13 @@ function collisionYourSelf(){
        var match = horizontalMatch && verticalMatch;
         if (match) {
         
-            alert('game over');
+              alert('GAME OVER -- Você fez '+pontuacao+' pontos!');
             
               window.location.href = "index.html";
               return false;
         } 
    }
      
-       
-   
-  
   
 }
 

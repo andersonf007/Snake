@@ -17,11 +17,14 @@ var celulas = new Array();
 var prev_x = 0;
 var prev_y = 0;
 var pontuacao = 0;
+
+var moverSnake = true;
 //.......................................................................
                
 
 //==================CAPTURANDO EVENTOS DO TECLADO========================//
 document.addEventListener("keydown", function(e){
+  while(moverSnake){ 
     if(e.keyCode===37){
 
             clearTimeout(moveContinuos);
@@ -77,7 +80,8 @@ document.addEventListener("keydown", function(e){
             }else {
                     move2Up();
             }
-     }   
+     }
+  }
 });
 //.......................................................................
 
@@ -124,7 +128,7 @@ function createSnake(){
     snake.appendChild(cabeca);
     snake.appendChild(t1);
     snake.appendChild(t2);
-    $('#pontuacao').html('Pontos: 0');
+    
 }
 
 function inicializa(){ 
@@ -149,11 +153,12 @@ function adicionarAoArray(id){
 /*MÉTODO RECEBE A POS X, Y E O ID DA CELULA QUE DESEJA SER MOVIDA*/
 function moverCelula(x,y,id){
    
-    console.log(x+"-"+y+" Para o ID"+id);
     var pescoco = document.getElementById(id);
-    var estadox = $('#'+id).position().left;
-    var estadoy = $('#'+id).position().top;
-    //console.log(pescoco);
+    var estadox = document.getElementById(id).offsetLeft;
+    
+    var estadoy = document.getElementById(id).offsetTop;
+    
+    
     if(pescoco != null){
     pescoco.setAttribute("style","border:2px solid white; width:50px;height:50px;background:black; top:"+y+"px; left: "+x+"px; position:absolute;");
     }
@@ -162,8 +167,8 @@ function moverCelula(x,y,id){
 
 
 function criarNovaCelula(){
-    // console.log("Id automático "+celulas.length);
-    var ultimaCelula = $('#'+celulas.length);
+   
+    var ultimaCelula = document.getElementById(celulas.length)
   
     //criando a div no javaScript para jogar no html
     var novaCelula = document.createElement("div");// <div></div>
@@ -178,8 +183,8 @@ function criarNovaCelula(){
     novaCelula.setAttributeNode(celulaClass);
    
     //Recuperando indormações da ultima celula
-    var l = ultimaCelula.position().left;
-    var t = ultimaCelula.position().top;
+    var l = ultimaCelula.offsetLeft;
+    var t = ultimaCelula.offsetTop;
 
     //Setando a posição inicial para essa nova célula.
     // OBs.. Config. válida para o movivento para direita.
@@ -192,66 +197,66 @@ function criarNovaCelula(){
 // ------MOvimentos-----------------------------------------------------------//
 function move2Left(){
     mov_flag = MOV_LEFT;
-       
+     
     //ARMAZENANDO O ESTADO DA DIV CABEÇA
-    var estadox = $('#0').position().left;
-    var estadoy = $('#0').position().top;
- /***********************************************************************************************************************/  
- 
-    
+    var estadox = document.getElementById('0').offsetLeft;
+    var estadoy = document.getElementById('0').offsetTop;
+
     //MOVENDO A DIV PRINCIPAL (CABEÇA);
     left=left-increment; 
     var div = document.getElementById("0");
     div.setAttribute("style","border:2px solid white; width:50px;height:50px;background:black;top:"+topo+"px;left:"+left+"px;position:absolute");
-    
- /***********************************************************************************************************************/  
- 
+     
     //CHECANDO TODAS COLISÕES
-    checkCollisions(div, $('#esquerda'));
-    checkCollisionsOnCookie(div, $('.cookie')[0]);
+    checkCollisions(div, document.getElementById('esquerda')); 
+    checkCollisionsOnCookie(div, document.getElementsByClassName('cookie')[0] ); 
     collisionYourSelf();
- /***********************************************************************************************************************/ 
+    
     moveContinuos = setTimeout('move2Left();', velocity);
     moverCelula(estadox, estadoy, 1);
     
 }
 
 function move2Right(){
-
+ 
     mov_flag = MOV_RIGHT;
+    
     //ARMAZENANDO O ESTADO DA DIV CABEÇA
-    var estadox = $('#0').position().left;
-    var estadoy = $('#0').position().top;
-    /***********************************************************************************************************************/  
-
+    var estadox = document.getElementById('0').offsetLeft;
+    var estadoy = document.getElementById('0').offsetTop;
+    
+    //MOVENDO A DIV PRINCIPAL
     left=left+increment;   
     var div = document.getElementById("0");
     div.setAttribute("style","border:2px solid white; width:50px;height:50px;background:black;top:"+topo+"px;left:"+left+"px;position:absolute");
-    checkCollisions(div, $('#direita'));
-    // O cookie recuperado sempre no indice 0 pois ele é o unico na página.
-    checkCollisionsOnCookie(div, $('.cookie')[0]);
+    
+    //CHECKANDO COLISOES
+    checkCollisions(div, document.getElementById('direita') );
+    checkCollisionsOnCookie(div, document.getElementsByClassName('cookie')[0]);
     collisionYourSelf();
-     moveContinuos = setTimeout('move2Right();', velocity);
+    
+    moveContinuos = setTimeout('move2Right();', velocity);
     moverCelula(estadox, estadoy, 1);
     
 }
 
 function move2Up(){
-
     mov_flag = MOV_UP;
     
     //ARMAZENANDO O ESTADO DA DIV CABEÇA
-    var estadox = $('#0').position().left;
-    var estadoy = $('#0').position().top;
-
+    var estadox = document.getElementById('0').offsetLeft;
+    var estadoy = document.getElementById('0').offsetTop;
+   
+    //MOVENDO A DIV PRINCIPAL
     topo = topo-increment;
     var div = document.getElementById("0");
     div.setAttribute("style","border:2px solid white; width:50px;height:50px;background:black;top:"+topo+"px;left:"+left+"px;position:absolute");
-    checkCollisionsOnCookie(div, $('.cookie')[0]);
-    checkCollisions(div, $('#cima'));
-    // O cookie recuperado sempre no indice 0 pois ele é o unico na página.
     
+    //CHECKANDO COLISÕES
+    checkCollisions(div, document.getElementById('cima') ); 
+    checkCollisionsOnCookie(div, document.getElementsByClassName('cookie')[0] ); 
     collisionYourSelf();
+    
     moveContinuos = setTimeout('move2Up();', velocity);
     moverCelula(estadox, estadoy, 1);
     
@@ -260,18 +265,19 @@ function move2Up(){
 function move2Down(){
 
     mov_flag = MOV_DOWN;
-
-     //ARMAZENANDO O ESTADO DA DIV CABEÇA
-    var estadox = $('#0').position().left;
-    var estadoy = $('#0').position().top;
+     
+    //ARMAZENANDO O ESTADO DA DIV CABEÇA
+    var estadox = document.getElementById('0').offsetLeft;
+    var estadoy = document.getElementById('0').offsetTop;
     
+    //MOVENDO DIV PRINCIPAL.
     topo = topo+increment;
     var div = document.getElementById("0");
     div.setAttribute("style"," border:2px solid white; width:50px;height:50px;background:black;top:"+topo+"px;left:"+left+"px;position:absolute");
     
-    checkCollisions(div, $('#baixo'));
-    // O cookie recuperado sempre no indice 0 pois ele é o unico na página.
-    checkCollisionsOnCookie(div, $('.cookie')[0]);
+    //CHECKANDO COLISÕES
+    checkCollisions(div, document.getElementById('baixo') );
+    checkCollisionsOnCookie(div, document.getElementsByClassName('cookie')[0]);
     collisionYourSelf();
     moveContinuos = setTimeout('move2Down();', velocity);
     moverCelula(estadox, estadoy, 1);
@@ -281,13 +287,14 @@ function move2Down(){
 //------------------------COLISÕES--------------------------------------//
 //----------------------------------------------------------------------//
 function getPositions(obj){
-  var $objselected = $(obj);
-  var pos = $objselected.position();
-  var width = $objselected.width();
-  var height = $objselected.height();
-  return [
-    [pos.left, pos.left + width], // posicao esquerda, posiçao esquerda + largura
-    [pos.top, pos.top + height]   // posicao cima, posicao cima+altura;
+  
+  var posLeft = obj.offsetLeft;
+  var posTop = obj.offsetTop;
+  var width = obj.offsetWidth;
+  var height = obj.offsetHeight;
+  return [ // o -4 ESTÁ ALI, PROVAVELMENTE POR CAUSA DA BORDA INSERIDA QUE É DE 2PX ENTÃO DA 2 EM CIMA E 2 EM BAIXO.
+    [posLeft, posLeft + width-4], // posicao esquerda, posiçao esquerda + largura
+    [posTop, posTop + height-4]   // posicao cima, posicao cima+altura;
   ];
 }
 //Algoritimo de comparação dos objetos
@@ -310,26 +317,26 @@ function checkCollisions(obj1, obj2) {
   var match = horizontalMatch && verticalMatch;
   if (match) {
    
-   var lugarColisao = obj2.attr('id');
+   var lugarColisao = obj2.getAttribute('id');//obj2.attr('id');
         //window.location.href = 'index.html';
     
    // Troca a posição da Cobra ao Colidir com as bordas.
    switch(lugarColisao){
        case 'cima':          
-           topo = $('#baixo').position().top;
-	             
+          topo = document.getElementById('baixo').offsetTop; 
+          
        break;
        case 'baixo':
           // alert("Colidiu com a parte de baixo");
-           topo = $('#cima').position().top;         
+          topo = document.getElementById('cima').offsetTop; 
        break;
        case 'esquerda':
           // alert("Colidiu com a Esquerda");
-          left = $('#direita').position().left;         
+          left = document.getElementById('direita').offsetLeft;     
        break;
        case 'direita':       
            //alert("Colidiu com a Direita");
-          left = $('#esquerda').position().left;                  
+          left = document.getElementById('esquerda').offsetLeft;                   
        break;
    }
     
@@ -346,25 +353,27 @@ function checkCollisionsOnCookie(cobra, cookie){
   var verticalMatch = comparePositions(pos[1], pos2[1]);
   var match = horizontalMatch && verticalMatch;
   if (match) {
-        destroyCookie($(cookie).attr('id'));
+        destroyCookie(cookie.getAttribute('id'));
          
          createCookieRandon();
          //criação de celula
          criarNovaCelula();
          velocity = velocity - 5;
-         pontuacao +=1;
-         $('#pontuacao').html("Pontos: "+pontuacao); 
+         pontuacao +=10;
+         //innerhtml inseri um conteudo dentro de uma tag que no caso é pontuacao
+         document.getElementById('pontuacao').innerHTML = "Pontos: "+ pontuacao;
+         //innerHTML();
   }
   
   
 }
 
 function collisionYourSelf(){
-   var pos = getPositions($('#0')); // Pegando o elemento cabeça.
+   var pos = getPositions(document.getElementById('0')); 
    var gameover = false;
    for(var i = 1; i<=celulas.length; i++){
        
-       var pos2 = getPositions($('#'+i));
+       var pos2 = getPositions(document.getElementById(i)); 
        var horizontalMatch = comparePositions(pos[0], pos2[0]);
        var verticalMatch = comparePositions(pos[1], pos2[1]);
        var match = horizontalMatch && verticalMatch;
@@ -421,11 +430,4 @@ function destroyCookie(id){
 
 function getRandomInt(min, max) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
-}
-
-function killSnake(){
-    var snake = document.getElementById('paiDaSnake');
-    var cenario = document.getElementById('cenario');
-    cenario.removeChild(snake);
-    alert('Matou a cobra.');
 }

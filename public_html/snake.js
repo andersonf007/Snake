@@ -32,6 +32,7 @@ document.addEventListener("keydown", function(e){
               Se estiver não pode MOVER PARA ESQUERDA
               Então continua a se mover para DIREITA.
             */ 
+          
             if(mov_flag != MOV_RIGHT){
                     move2Left();
             }else {
@@ -62,6 +63,7 @@ document.addEventListener("keydown", function(e){
               Se estiver não pode MOVER PARA CIMA
               Então continua a se mover para BAIXO.
             */ 
+           
             if(mov_flag != MOV_DOWN){
                     move2Up();  
             } else {
@@ -75,6 +77,7 @@ document.addEventListener("keydown", function(e){
               Se estiver não pode MOVER PARA BAIXO
               Então continua a se mover para CIMA.
             */ 
+            
             if(mov_flag != MOV_UP){
                     move2Down();
             }else {
@@ -196,6 +199,7 @@ function criarNovaCelula(){
 }
 // ------MOvimentos-----------------------------------------------------------//
 function move2Left(){
+    
     mov_flag = MOV_LEFT;
      
     //ARMAZENANDO O ESTADO DA DIV CABEÇA
@@ -218,7 +222,7 @@ function move2Left(){
 }
 
 function move2Right(){
- 
+    
     mov_flag = MOV_RIGHT;
     
     //ARMAZENANDO O ESTADO DA DIV CABEÇA
@@ -241,6 +245,7 @@ function move2Right(){
 }
 
 function move2Up(){
+    
     mov_flag = MOV_UP;
     
     //ARMAZENANDO O ESTADO DA DIV CABEÇA
@@ -263,7 +268,7 @@ function move2Up(){
 }
 
 function move2Down(){
-
+    
     mov_flag = MOV_DOWN;
      
     //ARMAZENANDO O ESTADO DA DIV CABEÇA
@@ -430,4 +435,35 @@ function destroyCookie(id){
 
 function getRandomInt(min, max) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+//parar a cobra quando estiver fora da tela
+function stopSnake(){                               //vai pegar a posicao do elemento que peguei pelo id
+    var direita = document.getElementById('direita').offsetLeft;
+    var esquerda = document.getElementById('esquerda').offsetLeft;
+    var cima = document.getElementById('cima').offsetTop;
+    var baixo = document.getElementById('baixo').offsetTop;
+    
+    var cabecaLeft = document.getElementById('0').offsetLeft;
+    var cabecaTop = document.getElementById('0').offsetTop;
+    
+    if(cabecaLeft > esquerda){
+        moverSnake = true;
+    }else{
+        moverSnake = false;
+    }
+    if(cabecaLeft < direita){
+        moverSnake = true;
+    }else{
+        moverSnake = false;
+    }
+    if(cabecaTop < baixo){
+        moverSnake = true;
+    }else{
+        moverSnake = false;
+    }
+    if(cabecaTop > cima){
+        moverSnake = true;
+    }else{
+        moverSnake = false;
+    }
 }

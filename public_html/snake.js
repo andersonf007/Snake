@@ -86,6 +86,7 @@ document.addEventListener("keydown", function(e){
 
 //CRIANDO A COBRA
 function createSnake(){
+    //cabeça da cobra
     var cabeca = document.createElement("div");
     var divId = document.createAttribute("id");
     var divClass = document.createAttribute("class");
@@ -95,6 +96,7 @@ function createSnake(){
     cabeca.setAttributeNode(divClass);
     cabeca.setAttribute("style"," border:2px solid white; width:50px;height:50px;background:black;top:500px;left:150px;position:absolute");
     
+    //segundo quadrado da cobra
     var t1 = document.createElement("div");
     var divId1 = document.createAttribute("id");
     var divClass1 = document.createAttribute("class");
@@ -106,6 +108,7 @@ function createSnake(){
     t1.setAttributeNode(divClass1);
     t1.setAttribute("style","border:2px solid white; width:50px;height:50px;background:black;top:500px;left:100px;position:absolute");
     
+    //terceiro quadrado da cobra
     var t2 = document.createElement("div");
     var divId2 = document.createAttribute("id");
     var divClass2 = document.createAttribute("class");
@@ -157,7 +160,7 @@ function moverCelula(x,y,id){
      moverCelula(estadox, estadoy, id+1);
 } 
 
-// Verificar se precisa saber a posição de movimentação depois. e ultilizar a variavel mov_flag. VERIFICAR....!!!
+
 function criarNovaCelula(){
     // console.log("Id automático "+celulas.length);
     var ultimaCelula = $('#'+celulas.length);
@@ -313,7 +316,8 @@ function checkCollisions(obj1, obj2) {
    // Troca a posição da Cobra ao Colidir com as bordas.
    switch(lugarColisao){
        case 'cima':          
-           topo = $('#baixo').position().top;          
+           topo = $('#baixo').position().top;
+	             
        break;
        case 'baixo':
           // alert("Colidiu com a parte de baixo");

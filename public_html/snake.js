@@ -10,30 +10,25 @@ var moveContinuos = null;//Controle da função de andar só( Repeat )-- setTime
 var velocity = 190; //Quanto maior mais lento.
 var topo = 500;
 var left = 150;
-var increment=50;
+var increment=50;//mostrando de quantos e quantos pixels a cobra vai andar
 var id_auto = 0;
 
 var celulas = new Array();
-var prev_x = 0;
-var prev_y = 0;
 var pontuacao = 0;
 
-var moverSnakeX = true;
-var moverSnakeY = true;
+
 //.......................................................................
                
 
 //==================CAPTURANDO EVENTOS DO TECLADO========================//
 document.addEventListener("keydown", function(e){ 
-    if(e.keyCode===37){
-        
+    if(e.keyCode===37){ 
          
             clearTimeout(moveContinuos);
             /*Verifica se está se movendo para DIREITA
               Se estiver não pode MOVER PARA ESQUERDA
               Então continua a se mover para DIREITA.
-            */ 
-          
+            */           
             if(mov_flag != MOV_RIGHT){
                     move2Left();
             }else {
@@ -89,18 +84,17 @@ document.addEventListener("keydown", function(e){
 });
 //.......................................................................
 
-
 //================FUNÇÕES DO GAME (LÓGICA)===============================//
 
 //CRIANDO A COBRA
 function createSnake(){
     //cabeça da cobra
-    var cabeca = document.createElement("div");
-    var divId = document.createAttribute("id");
-    var divClass = document.createAttribute("class");
-    divClass.value = "snake";
-    divId.value = id_auto;
-    cabeca.setAttributeNode(divId);
+    var cabeca = document.createElement("div");//criar uma div
+    var divId = document.createAttribute("id");// criando um id para a div
+    var divClass = document.createAttribute("class");//criando a classe da div
+    divClass.value = "snake";//setando o valor da classe
+    divId.value = id_auto;// setando o valor do id
+    cabeca.setAttributeNode(divId);//atribuindo a classe  
     cabeca.setAttributeNode(divClass);
     cabeca.setAttribute("style"," border:2px solid white; width:50px;height:50px;background:black;top:500px;left:150px;position:absolute");
     
@@ -128,11 +122,16 @@ function createSnake(){
     t2.setAttributeNode(divClass2);
     t2.setAttribute("style", "border:2px solid white; width:50px;height:50px;background:black;top:500px;left:50px;position:absolute");
     
-    var snake = document.getElementById('paiDaSnake');
+    // adicionando tudo ao html
+    var snake = document.getElementById('paiDaSnake');//pegando a div do index e colocando as 3 divs dentro
+    //document.body.appendChild(cabeca);
+    //document.body.appendChild(t1);
+    //document.body.appendChild(t2);
+    
     snake.appendChild(cabeca);
     snake.appendChild(t1);
     snake.appendChild(t2);
-    
+   
 }
 
 function inicializa(){ 
@@ -142,17 +141,16 @@ function inicializa(){
     
 }
 
-
 //........................................................................
 //------------------------Crescimento da snake--------------------------------------//
 //----------------------------------------------------------------------//
+
 function adicionarAoArray(id){
     var tam = celulas.length;
     
     celulas[tam] = id;
+//toda vez que comer um biscoito ele vai adicionar um indice ao array
 }
-
-
 
 /*MÉTODO RECEBE A POS X, Y E O ID DA CELULA QUE DESEJA SER MOVIDA*/
 function moverCelula(x,y,id){
@@ -161,16 +159,15 @@ function moverCelula(x,y,id){
     var estadox = document.getElementById(id).offsetLeft; 
     var estadoy = document.getElementById(id).offsetTop;
     
-    if(pescoco != null){
+    if(pescoco !== null){
     pescoco.setAttribute("style","border:2px solid white; width:50px;height:50px;background:black; top:"+y+"px; left: "+x+"px; position:absolute;");
     }
      moverCelula(estadox, estadoy, id+1);
 } 
 
-
 function criarNovaCelula(){
    
-    var ultimaCelula = document.getElementById(celulas.length)
+    var ultimaCelula = document.getElementById(celulas.length);
   
     //criando a div no javaScript para jogar no html
     var novaCelula = document.createElement("div");// <div></div>
@@ -184,13 +181,11 @@ function criarNovaCelula(){
     novaCelula.setAttributeNode(celulaID);
     novaCelula.setAttributeNode(celulaClass);
    
-    //Recuperando indormações da ultima celula
+    //Recuperando informações da ultima celula
     var l = ultimaCelula.offsetLeft;
     var t = ultimaCelula.offsetTop;
 
     //Setando a posição inicial para essa nova célula.
-    // OBs.. Config. válida para o movivento para direita.
-    l = l + 50;
     novaCelula.setAttribute("style","width:50px;height:50px;background:black;top:"+t+"px;left:"+l+"px;position:absolute");
 
     var snake = document.getElementById('paiDaSnake');
@@ -207,13 +202,17 @@ function move2Left(){
 
     //MOVENDO A DIV PRINCIPAL (CABEÇA);
     left=left-increment; 
-    var div = document.getElementById("0");
-    div.setAttribute("style","border:2px solid white; width:50px;height:50px;background:black;top:"+topo+"px;left:"+left+"px;position:absolute");
+    var cabeca = document.getElementById("0");
+    cabeca.setAttribute("style","border:2px solid white; width:50px;height:50px;background:black;top:"+topo+"px;left:"+left+"px;position:absolute");
      
     //CHECANDO TODAS COLISÕES
-    checkCollisions(div, document.getElementById('esquerda')); 
-    checkCollisionsOnCookie(div, document.getElementsByClassName('cookie')[0] ); 
+    checkCollisions(cabeca, document.getElementById('esquerda')); 
+    checkCollisionsOnCookie(cabeca, document.getElementsByClassName('cookie')[0] ); 
     collisionYourSelf();
+    
+    //rechamando o metodo
+    //recebe uma funcao e um tempo em milisegundos para chama-la
+    
     
     moveContinuos = setTimeout('move2Left();', velocity);
     moverCelula(estadox, estadoy, 1);
@@ -291,10 +290,10 @@ function move2Down(){
 //------------------------COLISÕES--------------------------------------//
 //----------------------------------------------------------------------//
 function getPositions(obj){
-  
+  //recebe um objeto e retorna suas posicoes
   var posLeft = obj.offsetLeft;
   var posTop = obj.offsetTop;
-  var width = obj.offsetWidth;
+  var width = obj.offsetWidth; 
   var height = obj.offsetHeight;
   return [ // o -4 ESTÁ ALI, PROVAVELMENTE POR CAUSA DA BORDA INSERIDA QUE É DE 2PX ENTÃO DA 2 EM CIMA E 2 EM BAIXO.
     [posLeft, posLeft + width-4], // posicao esquerda, posiçao esquerda + largura
@@ -372,8 +371,9 @@ function checkCollisionsOnCookie(cobra, cookie){
 }
 
 function collisionYourSelf(){
-   var pos = getPositions(document.getElementById('0')); 
-   var gameover = false;
+   
+    var pos = getPositions(document.getElementById('0')); 
+   
    for(var i = 1; i<=celulas.length; i++){
        
        var pos2 = getPositions(document.getElementById(i)); 
@@ -385,8 +385,8 @@ function collisionYourSelf(){
               alert('GAME OVER -- Você fez '+pontuacao+' pontos!');
               window.location.href = "index.html";
               
-              return false;
-              break;
+              return false;//pra no ficar dando muitos game over
+              break;//pra no ficar dando muitos game over
         } 
    }
      
@@ -398,6 +398,7 @@ function collisionYourSelf(){
 //----------------------------------------------------------------------//
 
 function createCookieRandon(){ 
+    
     var posicoesWidth = new Array();
     var posicoesHeight = new Array();
     
@@ -421,6 +422,7 @@ function createCookieRandon(){
         indice2++;
     }
     
+    //-3 e´para nao criar fora da area do jogo
     var i = getRandomInt(0, posicoesWidth.length-3);
     leftCookie = posicoesWidth[i];
     
@@ -428,7 +430,7 @@ function createCookieRandon(){
     topCookie = posicoesHeight[i2];
     
     //gerando um id randonico.
-    rndID = getRandomInt(50, 100);
+    var rndID = getRandomInt(50, 100);
     
     var cookie = document.createElement("div");
     var cookieId = document.createAttribute("id");
@@ -460,7 +462,8 @@ function getRandomInt(min, max) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 //parar a cobra quando estiver fora da tela
-function headIsVisible(){                               //vai pegar a posicao do elemento que peguei pelo id
+/*
+ function headIsVisible(){                               //vai pegar a posicao do elemento que peguei pelo id
     var direita = document.getElementById('direita').offsetLeft;
     var esquerda = document.getElementById('esquerda').offsetLeft;
     var cima = document.getElementById('cima').offsetTop;
@@ -480,6 +483,5 @@ function headIsVisible(){                               //vai pegar a posicao do
         return  false;
         
     }
-    
-    
 }
+*/

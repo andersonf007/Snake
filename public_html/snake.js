@@ -9,7 +9,7 @@ var moveContinuos = null;//Controle da função de andar só( Repeat )-- setTime
 
 var velocity = 190; //Quanto maior mais lento.
 var topo = 500;
-var left = 500;
+var left = 150;
 var increment=50;
 var id_auto = 0;
 
@@ -18,15 +18,16 @@ var prev_x = 0;
 var prev_y = 0;
 var pontuacao = 0;
 
-var moverSnake = true;
+var moverSnakeX = true;
+var moverSnakeY = true;
 //.......................................................................
                
 
 //==================CAPTURANDO EVENTOS DO TECLADO========================//
-document.addEventListener("keydown", function(e){
-  while(moverSnake){ 
+document.addEventListener("keydown", function(e){ 
     if(e.keyCode===37){
-
+        
+         
             clearTimeout(moveContinuos);
             /*Verifica se está se movendo para DIREITA
               Se estiver não pode MOVER PARA ESQUERDA
@@ -38,7 +39,7 @@ document.addEventListener("keydown", function(e){
             }else {
                     move2Right();
             }
-
+        
 
     }else
     if(e.keyCode===39){
@@ -84,7 +85,7 @@ document.addEventListener("keydown", function(e){
                     move2Up();
             }
      }
-  }
+  
 });
 //.......................................................................
 
@@ -138,7 +139,7 @@ function inicializa(){
     createCookieRandon();
     createSnake();
     move2Right(); // Movimento padrão para inicar o jogo. 
-
+    
 }
 
 
@@ -157,10 +158,8 @@ function adicionarAoArray(id){
 function moverCelula(x,y,id){
    
     var pescoco = document.getElementById(id);
-    var estadox = document.getElementById(id).offsetLeft;
-    
+    var estadox = document.getElementById(id).offsetLeft; 
     var estadoy = document.getElementById(id).offsetTop;
-    
     
     if(pescoco != null){
     pescoco.setAttribute("style","border:2px solid white; width:50px;height:50px;background:black; top:"+y+"px; left: "+x+"px; position:absolute;");
@@ -199,7 +198,7 @@ function criarNovaCelula(){
 }
 // ------MOvimentos-----------------------------------------------------------//
 function move2Left(){
-    
+     
     mov_flag = MOV_LEFT;
      
     //ARMAZENANDO O ESTADO DA DIV CABEÇA
@@ -218,7 +217,7 @@ function move2Left(){
     
     moveContinuos = setTimeout('move2Left();', velocity);
     moverCelula(estadox, estadoy, 1);
-    
+   
 }
 
 function move2Right(){
@@ -264,7 +263,7 @@ function move2Up(){
     
     moveContinuos = setTimeout('move2Up();', velocity);
     moverCelula(estadox, estadoy, 1);
-    
+    breakControls();
 }
 
 function move2Down(){
@@ -286,7 +285,7 @@ function move2Down(){
     collisionYourSelf();
     moveContinuos = setTimeout('move2Down();', velocity);
     moverCelula(estadox, estadoy, 1);
-    
+    breakControls();
 }
 //........................................................................
 //------------------------COLISÕES--------------------------------------//
@@ -328,20 +327,19 @@ function checkCollisions(obj1, obj2) {
    // Troca a posição da Cobra ao Colidir com as bordas.
    switch(lugarColisao){
        case 'cima':          
-          topo = document.getElementById('baixo').offsetTop; 
-          
+          topo = document.getElementById('baixo').offsetTop - 10;        
        break;
-       case 'baixo':
-          // alert("Colidiu com a parte de baixo");
-          topo = document.getElementById('cima').offsetTop; 
+       
+       case 'baixo':         
+          topo = document.getElementById('cima').offsetTop +10;
        break;
+       
        case 'esquerda':
-          // alert("Colidiu com a Esquerda");
-          left = document.getElementById('direita').offsetLeft;     
+          left = document.getElementById('direita').offsetLeft -10;     
        break;
-       case 'direita':       
-           //alert("Colidiu com a Direita");
-          left = document.getElementById('esquerda').offsetLeft;                   
+       
+       case 'direita':            
+          left = document.getElementById('esquerda').offsetLeft+10;                   
        break;
    }
     
@@ -363,7 +361,7 @@ function checkCollisionsOnCookie(cobra, cookie){
          createCookieRandon();
          //criação de celula
          criarNovaCelula();
-         velocity = velocity - 5;
+         velocity = velocity - 3;
          pontuacao +=10;
          //innerhtml inseri um conteudo dentro de uma tag que no caso é pontuacao
          document.getElementById('pontuacao').innerHTML = "Pontos: "+ pontuacao;
@@ -385,9 +383,10 @@ function collisionYourSelf(){
         if (match) {
         
               alert('GAME OVER -- Você fez '+pontuacao+' pontos!');
-            
               window.location.href = "index.html";
+              
               return false;
+              break;
         } 
    }
      
@@ -398,14 +397,37 @@ function collisionYourSelf(){
 //------------------------Randon Cookie--------------------------------------//
 //----------------------------------------------------------------------//
 
-function createCookieRandon(){
+function createCookieRandon(){ 
+    var posicoesWidth = new Array();
+    var posicoesHeight = new Array();
+    
     var alturaJanela = window.innerHeight;
     var larguraJanela = window.innerWidth;
     var topCookie = 0;
     var leftCookie = 0;
-    topCookie = getRandomInt(50, alturaJanela - 100);
-    leftCookie = getRandomInt(50, larguraJanela - 150);
     
+    // Gera Numeros multiplos de 50 e coloca em um array
+    var indice1 = 0;
+    for (var i = 100; i<= larguraJanela; i += 50){
+       
+        posicoesWidth[indice1] = i;
+        indice1++;
+    }
+    
+    var indice2 = 0;
+    for (var i = 100; i<= alturaJanela; i += 50){
+       
+        posicoesHeight[indice2] = i;
+        indice2++;
+    }
+    
+    var i = getRandomInt(0, posicoesWidth.length-3);
+    leftCookie = posicoesWidth[i];
+    
+    var i2 = getRandomInt(0, posicoesHeight.length-3);
+    topCookie = posicoesHeight[i2];
+    
+    //gerando um id randonico.
     rndID = getRandomInt(50, 100);
     
     var cookie = document.createElement("div");
@@ -419,11 +441,12 @@ function createCookieRandon(){
     cookie.setAttributeNode(cookieId);
     cookie.setAttributeNode(cookieClass);
     
-    cookie.setAttribute("style","width:50px;height:50px;background:green;top:"+topCookie+"px;left:"+leftCookie+"px;position:absolute");
+    cookie.setAttribute("style","boder 2px solid green;width:50px;height:50px;background:green;top:"+topCookie+"px;left:"+leftCookie+"px;position:absolute");
     
     
     document.body.appendChild(cookie);
     
+     
 }
 
 function destroyCookie(id){
@@ -437,7 +460,7 @@ function getRandomInt(min, max) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 //parar a cobra quando estiver fora da tela
-function stopSnake(){                               //vai pegar a posicao do elemento que peguei pelo id
+function headIsVisible(){                               //vai pegar a posicao do elemento que peguei pelo id
     var direita = document.getElementById('direita').offsetLeft;
     var esquerda = document.getElementById('esquerda').offsetLeft;
     var cima = document.getElementById('cima').offsetTop;
@@ -446,24 +469,17 @@ function stopSnake(){                               //vai pegar a posicao do ele
     var cabecaLeft = document.getElementById('0').offsetLeft;
     var cabecaTop = document.getElementById('0').offsetTop;
     
-    if(cabecaLeft > esquerda){
-        moverSnake = true;
+    var status = 'Direita: '+direita+" Esquerda"+esquerda;
+    status += "\n cabeça x "+cabecaLeft;
+    
+    if(cabecaLeft > esquerda && cabecaLeft < direita || (cabecaTop < baixo) && (cabecaTop > cima && cabecaTop != cima )){
+        alert("Cabeça: "+cabecaTop + " Barreira Cima: "+ cima+"\nCabeça: "+cabecaTop+" Barreira baixo:"+baixo);
+        return  true;
+        
     }else{
-        moverSnake = false;
+        return  false;
+        
     }
-    if(cabecaLeft < direita){
-        moverSnake = true;
-    }else{
-        moverSnake = false;
-    }
-    if(cabecaTop < baixo){
-        moverSnake = true;
-    }else{
-        moverSnake = false;
-    }
-    if(cabecaTop > cima){
-        moverSnake = true;
-    }else{
-        moverSnake = false;
-    }
+    
+    
 }
